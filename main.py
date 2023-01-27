@@ -10,6 +10,7 @@ black = (0, 0, 0)
 white = (255, 255, 255)
 green = (0, 255, 5)
 #player
+player_sprite = pygame.image.load("player_sprite.png")
 player_color = (3, 25, 255)
 #fruit
 fruit_color = (255, 2, 25)
@@ -116,6 +117,7 @@ def game_loop():
         fps = round(fps)
         displaysurf.blit(fps_text, (displaysurf_width / 100, displaysurf_height / 20))
         Clock.tick(60)
+        displaysurf.blit(player_sprite, (player_x, player_y))
         pygame.display.update()
 
 
