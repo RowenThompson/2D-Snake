@@ -11,6 +11,7 @@ white = (255, 255, 255)
 green = (0, 255, 5)
 #player
 player_sprite = pygame.image.load("player_sprite.png")
+player_sprite = pygame.transform.scale(player_sprite, (100, 100))
 player_color = (3, 25, 255)
 #fruit
 fruit_color = (255, 2, 25)
@@ -25,7 +26,12 @@ Clock = pygame.time.Clock()
 
 
 def game_loop():
+    #gravity
+    y_gravity = 1
+    jump_height = 20
+    y_velocity = jump_height
     #player
+    player_jumping = False
     fps = Clock.get_fps()
     player_dead = False
     player_x = displaysurf_width/2
@@ -44,6 +50,7 @@ def game_loop():
     #fruit
     fruit_x = random.choice(fruit_coord_list)
     fruit_y = random.choice(fruit_coord_list)
+    #score
     score = 0
     while not player_dead:
         score_text = score_font.render("Score: "+str(score), True, green)
@@ -68,7 +75,7 @@ def game_loop():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
-                    player_y -= player_speed
+                    player_jumping = True
                     player_direction = "north"
                 if event.key == pygame.K_s:
                     pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
@@ -97,27 +104,36 @@ def game_loop():
         enemy_rect = pygame.draw.rect(displaysurf, enemy_color, pygame.Rect(enemy_x, enemy_y, 100, 100))
         pygame.draw.rect(displaysurf, fruit_color, pygame.Rect(fruit_x, fruit_y, 75, 75))
         pygame.draw.rect(displaysurf, green, pygame.Rect(fruit_x+25, fruit_y+25, 25, 25))
-        player_rect = pygame.draw.rect(displaysurf, player_color, pygame.Rect(player_x, player_y, 75, 75))
+        #player_rect = pygame.draw.rect(displaysurf, player_color, pygame.Rect(player_x, player_y, 75, 75))
+        if not player_jumping:
+            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
+        if player_jumping:
+            player_y -= y_velocity
+            y_velocity -= y_gravity
+            if y_velocity < -jump_height:
+                player_jumping = False
+                y_velocity = jump_height
+            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
         if player_rect.colliderect(enemy_rect):
             player_dead = True
-        if player_direction == "north":
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y, 25, 25))
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y, 25, 25))
-        if player_direction == "south":
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y+50, 25, 25))
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y+50, 25, 25))
-        if player_direction == "west":
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y, 25, 25))
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y+50, 25, 25))
-        if player_direction == "east":
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y+50, 25, 25))
-            pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y, 25, 25))
+        # if player_direction == "north":
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y, 25, 25))
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y, 25, 25))
+        # if player_direction == "south":
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y+50, 25, 25))
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y+50, 25, 25))
+        # if player_direction == "west":
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y, 25, 25))
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y+50, 25, 25))
+        # if player_direction == "east":
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y+50, 25, 25))
+        #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y, 25, 25))
         displaysurf.blit(score_text, (displaysurf_width / 100, displaysurf_height / 100))
         fps = Clock.get_fps()
         fps = round(fps)
         displaysurf.blit(fps_text, (displaysurf_width / 100, displaysurf_height / 20))
+        grass_ground_rect = pygame.draw.rect(displaysurf, green, pygame.Rect(displaysurf_width/1000, displaysurf_height/1.7, 1000, 400))
         Clock.tick(60)
-        displaysurf.blit(player_sprite, (player_x, player_y))
         pygame.display.update()
 
 
