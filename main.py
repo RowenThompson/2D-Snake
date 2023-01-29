@@ -1,6 +1,6 @@
 import pygame, sys, random
 pygame.init()
-game_icon = pygame.image.load("dialogue_box.png")
+game_icon = pygame.image.load("game_icon.png")
 resolution = displaysurf_width, displaysurf_height = (1000, 1000)
 displaysurf = pygame.display.set_mode((resolution))
 pygame.display.set_caption("2D Snake")
@@ -86,22 +86,23 @@ def game_loop():
 
                 if event.key == pygame.K_ESCAPE:
                     quit_game()
-                if event.key == pygame.K_w:
-                    pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
-                    player_jumping = True
-                    player_direction = "north"
-                if event.key == pygame.K_s:
-                    pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
-                    player_y += player_speed
-                    player_direction = "south"
-                if event.key == pygame.K_a:
-                    pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
-                    player_x -= player_speed
-                    player_direction = "west"
-                if event.key == pygame.K_d:
-                    pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
-                    player_x += player_speed
-                    player_direction = "east"
+                if not player_jumping:
+                    if event.key == pygame.K_w:
+                        pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
+                        player_jumping = True
+                        player_direction = "north"
+                    if event.key == pygame.K_s:
+                        pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
+                        player_y += player_speed
+                        player_direction = "south"
+                    if event.key == pygame.K_a:
+                        pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
+                        player_x -= player_speed
+                        player_direction = "west"
+                    if event.key == pygame.K_d:
+                        pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
+                        player_x += player_speed
+                        player_direction = "east"
         #enemy hard-coded movement
         # if enemy_ai:
         #     enemy_random_move = random.choice(enemy_move_choice_list)
@@ -141,10 +142,10 @@ def game_loop():
         # if player_direction == "east":
         #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y+50, 25, 25))
         #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y, 25, 25))
-        displaysurf.blit(score_text, (displaysurf_width / 100, displaysurf_height / 100))
+        displaysurf.blit(score_text, (displaysurf_width / 100, displaysurf_height / 20))
         fps = Clock.get_fps()
         fps = round(fps)
-        displaysurf.blit(fps_text, (displaysurf_width / 100, displaysurf_height / 20))
+        displaysurf.blit(fps_text, (displaysurf_width / 100, displaysurf_height / 100))
         grass_ground_rect = pygame.draw.rect(displaysurf, green, pygame.Rect(displaysurf_width/1000, displaysurf_height/1.7, 1000, 400))
         Clock.tick(60)
         pygame.display.update()
