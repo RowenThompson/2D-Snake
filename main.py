@@ -16,6 +16,7 @@ player_color = (3, 25, 255)
 #fruit
 fruit_color = (255, 2, 25)
 fruit_coord_list = [25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 400]
+fruit_coord_list_y = [250, 275, 300, 325, 350, 375, 400]
 #enemy
 enemy_ai = True
 #score
@@ -24,6 +25,9 @@ score = 0
 #clock
 Clock = pygame.time.Clock()
 
+def quit_game():
+    pygame.quit()
+    sys.exit()
 
 def game_loop():
     #gravity
@@ -39,6 +43,7 @@ def game_loop():
     player_loc = player_x, player_y
     player_speed = 25
     player_direction = "north"
+    player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
     #enemy
     enemy_move_choice_list = ["north", "south", "west", "east"]
     enemy_random_move = random.choice(enemy_move_choice_list)
@@ -49,7 +54,8 @@ def game_loop():
     enemy_color = (255, 0, 15)
     #fruit
     fruit_x = random.choice(fruit_coord_list)
-    fruit_y = random.choice(fruit_coord_list)
+    fruit_y = random.choice(fruit_coord_list_y)
+    fruit_rect = pygame.draw.rect(displaysurf, fruit_color, pygame.Rect(fruit_x, fruit_y, 75, 75))
     #score
     score = 0
     while not player_dead:
@@ -62,7 +68,7 @@ def game_loop():
         player_speed = 25
         enemy_speed = default_enemy_speed
 
-        if fruit_loc == player_loc:
+        if player_rect.colliderect(fruit_rect):
             pygame.draw.rect(displaysurf, black, pygame.Rect(fruit_x, fruit_y, 75, 75))
             fruit_x = random.choice(fruit_coord_list)
             fruit_y = random.choice(fruit_coord_list)
@@ -73,6 +79,13 @@ def game_loop():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    pygame.draw.rect(displaysurf, black, pygame.Rect(fruit_x, fruit_y, 75, 75))
+                    fruit_x = random.choice(fruit_coord_list)
+                    fruit_y = random.choice(fruit_coord_list)
+
+                if event.key == pygame.K_ESCAPE:
+                    quit_game()
                 if event.key == pygame.K_w:
                     pygame.draw.rect(displaysurf, black, pygame.Rect(player_x, player_y, 75, 75))
                     player_jumping = True
@@ -90,19 +103,19 @@ def game_loop():
                     player_x += player_speed
                     player_direction = "east"
         #enemy hard-coded movement
-        if enemy_ai:
-            enemy_random_move = random.choice(enemy_move_choice_list)
-            if enemy_random_move == "north":
-                enemy_y -= enemy_speed
-            if enemy_random_move == "south":
-                enemy_y += enemy_speed
-            if enemy_random_move == "west":
-                enemy_x -= enemy_speed
-            if enemy_random_move == "east":
-                enemy_x += enemy_speed
+        # if enemy_ai:
+        #     enemy_random_move = random.choice(enemy_move_choice_list)
+        #     if enemy_random_move == "north":
+        #         enemy_y -= enemy_speed
+        #     if enemy_random_move == "south":
+        #         enemy_y += enemy_speed
+        #     if enemy_random_move == "west":
+        #         enemy_x -= enemy_speed
+        #     if enemy_random_move == "east":
+        #         enemy_x += enemy_speed
 
-        enemy_rect = pygame.draw.rect(displaysurf, enemy_color, pygame.Rect(enemy_x, enemy_y, 100, 100))
-        pygame.draw.rect(displaysurf, fruit_color, pygame.Rect(fruit_x, fruit_y, 75, 75))
+        #enemy_rect = pygame.draw.rect(displaysurf, enemy_color, pygame.Rect(enemy_x, enemy_y, 100, 100))
+        fruit_rect = pygame.draw.rect(displaysurf, fruit_color, pygame.Rect(fruit_x, fruit_y, 75, 75))
         pygame.draw.rect(displaysurf, green, pygame.Rect(fruit_x+25, fruit_y+25, 25, 25))
         #player_rect = pygame.draw.rect(displaysurf, player_color, pygame.Rect(player_x, player_y, 75, 75))
         if not player_jumping:
@@ -114,8 +127,8 @@ def game_loop():
                 player_jumping = False
                 y_velocity = jump_height
             player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
-        if player_rect.colliderect(enemy_rect):
-            player_dead = True
+        #if player_rect.colliderect(enemy_rect):
+            #player_dead = True
         # if player_direction == "north":
         #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x, player_y, 25, 25))
         #     pygame.draw.rect(displaysurf, white, pygame.Rect(player_x+50, player_y, 25, 25))
@@ -141,11 +154,11 @@ def game_loop():
     while player_dead:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                quit_game()
         pygame.display.update()
         
 running = True
 if __name__ == "__main__":
     while running == True:
         game_loop()
+quit_game()
