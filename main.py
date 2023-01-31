@@ -3,7 +3,7 @@ pygame.init()
 game_icon = pygame.image.load("game_icon.png")
 resolution = displaysurf_width, displaysurf_height = (1000, 1000)
 displaysurf = pygame.display.set_mode((resolution))
-pygame.display.set_caption("2D Snake")
+pygame.display.set_caption("2D Snake Fight")
 pygame.display.set_icon(game_icon)
 #colors
 black = (0, 0, 0)
