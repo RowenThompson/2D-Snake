@@ -12,16 +12,16 @@ green = (0, 255, 5)
 red = (255, 0, 0)
 #player
 player_color = (3, 25, 255)
-#score and font
+#font
 font = pygame.font.SysFont("comicsansms", 35)
 #clock
 Clock = pygame.time.Clock()
 #map tiles
 grass_tile = pygame.image.load("grass_tile.png")
-grass_tile = pygame.transform.scale(grass_tile, (75, 75))
+grass_tile = pygame.transform.scale(grass_tile, (64, 64))
 
 dirt_tile = pygame.image.load("dirt_tile.png")
-dirt_tile = pygame.transform.scale(dirt_tile, (75, 75))
+dirt_tile = pygame.transform.scale(dirt_tile, (64, 64))
 
 map1 = """
 
@@ -42,31 +42,9 @@ map1 = """
 
 
 
-
-
-
-
-g                         g
-
-
-
-
-
-
-
-
-
-
-
-
-
 ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
 
-
-
 ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-
-
 
 ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"""
 map1 = map1.splitlines()
@@ -76,13 +54,19 @@ def tiles(map1):
     for y, line in enumerate(map1):
         for x, c in enumerate(line):
             if c == "g":
-                displaysurf.blit(grass_tile, (x * 16, y * 16))
+                displaysurf.blit(grass_tile, (x * 32, y * 32))
             if c == "d":
-                displaysurf.blit(dirt_tile, (x * 16, y * 16))
+                displaysurf.blit(dirt_tile, (x * 32, y * 32))
 
 def quit_game():
     pygame.quit()
     sys.exit()
+
+def main_menu():
+    pass
+
+def loading_menu():
+    pass
 
 def game_loop():
     #gravity
@@ -91,12 +75,12 @@ def game_loop():
     player_y_velocity = player_jump_height
     #player
     player_sprite = pygame.image.load("player_sprite.png")
-    player_sprite = pygame.transform.scale(player_sprite, (125, 125))
+    player_sprite = pygame.transform.scale(player_sprite, (128, 128))
     player_moving = False
     player_jumping = False
     player_dead = False
     player_x = displaysurf_width/2
-    player_y = displaysurf_height/2.14
+    player_y = displaysurf_height/2.155
     player_loc = player_x, player_y
     player_speed = 5
     player_direction = "west"
