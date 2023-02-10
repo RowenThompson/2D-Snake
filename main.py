@@ -1,5 +1,4 @@
-import pygame, sys, random
-from map import *
+import pygame, sys
 pygame.init()
 game_icon = pygame.image.load("game_icon.png")
 resolution = displaysurf_width, displaysurf_height = (1000, 1000)
@@ -17,6 +16,12 @@ player_color = (3, 25, 255)
 font = pygame.font.SysFont("comicsansms", 35)
 #clock
 Clock = pygame.time.Clock()
+#map tiles
+grass_tile = pygame.image.load("grass_tile.png")
+grass_tile = pygame.transform.scale(grass_tile, (75, 75))
+
+dirt_tile = pygame.image.load("dirt_tile.png")
+dirt_tile = pygame.transform.scale(dirt_tile, (75, 75))
 
 map1 = """
 
@@ -64,17 +69,7 @@ ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
 
 
 ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"""
-
 map1 = map1.splitlines()
-
-#for line in map1:
- #   print(line)
-
-grass_tile = pygame.image.load("grass_tile.png")
-grass_tile = pygame.transform.scale(grass_tile, (75, 75))
-
-dirt_tile = pygame.image.load("dirt_tile.png")
-dirt_tile = pygame.transform.scale(dirt_tile, (75, 75))
 
 def tiles(map1):
     global grass_tile
@@ -136,15 +131,6 @@ def game_loop():
             if player_y_velocity < -player_jump_height:
                 player_jumping = False
                 player_y_velocity = player_jump_height
-            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
-        if not player_moving:
-            player_direction = "NOWHERE"
-        if player_direction == "west":
-            player_sprite = pygame.transform.flip(player_sprite, 0, 0)
-            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
-        if player_direction == "east":
-            player_sprite = pygame.transform.flip(player_sprite, 180, 0)
-            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
         if player_moving:
             player_sprites = []
             player_sprites.append(pygame.image.load('player_running_1.png'))
