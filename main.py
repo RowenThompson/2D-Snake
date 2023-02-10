@@ -1,6 +1,6 @@
 import pygame, sys
 pygame.init()
-game_icon = pygame.image.load("game_icon.png")
+game_icon = pygame.image.load("graphics\\game_icon.png")
 resolution = displaysurf_width, displaysurf_height = (1000, 1000)
 displaysurf = pygame.display.set_mode((resolution))
 pygame.display.set_caption("2D Snake Fight")
@@ -17,12 +17,13 @@ font = pygame.font.SysFont("comicsansms", 35)
 #clock
 Clock = pygame.time.Clock()
 #map tiles
-grass_rect_list = []
-grass_tile = pygame.image.load("grass_tile.png")
-grass_tile = pygame.transform.scale(grass_tile, (64, 64))
+tile_rect_list = []
 
-dirt_tile = pygame.image.load("dirt_tile.png")
-dirt_tile = pygame.transform.scale(dirt_tile, (64, 64))
+grass_tile = pygame.image.load("graphics\\grass_tile.png")
+grass_tile = pygame.transform.scale(grass_tile, (32, 32))
+
+dirt_tile = pygame.image.load("graphics\\dirt_tile.png")
+dirt_tile = pygame.transform.scale(dirt_tile, (32, 32))
 
 map1 = """
 
@@ -35,7 +36,27 @@ map1 = """
 
 
 
-g                           gggg     ggg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+g          d      d           gggg     ggg
+
 
 
 
@@ -44,9 +65,7 @@ g                           gggg     ggg
 
 
 ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
-
 ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
-
 ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"""
 map1 = map1.splitlines()
 
@@ -55,10 +74,11 @@ def tiles(map1):
     for y, line in enumerate(map1):
         for x, c in enumerate(line):
             if c == "g":
-                grass_rect = displaysurf.blit(grass_tile, (x * 32, y * 32))
-                grass_rect_list.append(grass_rect)
+                grass_rect = displaysurf.blit(grass_tile, (x * 16, y * 16))
+                tile_rect_list.append(grass_rect)
             if c == "d":
-                displaysurf.blit(dirt_tile, (x * 32, y * 32))
+                dirt_rect = displaysurf.blit(dirt_tile, (x * 16, y * 16))
+                tile_rect_list.append(dirt_rect)
 
 def quit_game():
     pygame.quit()
@@ -76,7 +96,7 @@ def game_loop():
     player_jump_height = 22.5
     player_y_velocity = player_jump_height
     #player
-    player_sprite = pygame.image.load("player_sprite.png")
+    player_sprite = pygame.image.load("graphics\\player_sprite.png")
     player_sprite = pygame.transform.scale(player_sprite, (128, 128))
     player_moving = False
     player_jumping = False
@@ -107,10 +127,11 @@ def game_loop():
             player_x -= player_speed
             player_direction = "west"
             player_moving = True
-        if keys[pygame.K_w]:
+        if keys[pygame.K_SPACE]:
             player_jumping = True
-        if not player_jumping:
-            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
+        for tile_rect in tile_rect_list:
+            if player_rect.colliderect(tile_rect):
+                pass
         if player_jumping:
             player_y -= player_y_velocity
             player_y_velocity -= player_y_gravity
@@ -119,10 +140,10 @@ def game_loop():
                 player_y_velocity = player_jump_height
         if player_moving:
             player_sprites = []
-            player_sprites.append(pygame.image.load('player_running_1.png'))
-            player_sprites.append(pygame.image.load('player_running_2.png'))
-            player_sprites.append(pygame.image.load('player_running_3.png'))
-            player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
+            player_sprites.append(pygame.image.load('graphics\\player_running_1.png'))
+            player_sprites.append(pygame.image.load('graphics\\player_running_2.png'))
+            player_sprites.append(pygame.image.load('graphics\\player_running_3.png'))
+        player_rect = displaysurf.blit(player_sprite, (player_x, player_y))
         fps = Clock.get_fps()
         fps = round(fps)
         displaysurf.blit(fps_text, (displaysurf_width / 100, displaysurf_height / 100))
