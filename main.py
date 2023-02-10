@@ -17,6 +17,7 @@ font = pygame.font.SysFont("comicsansms", 35)
 #clock
 Clock = pygame.time.Clock()
 #map tiles
+grass_rect_list = []
 grass_tile = pygame.image.load("grass_tile.png")
 grass_tile = pygame.transform.scale(grass_tile, (64, 64))
 
@@ -34,7 +35,7 @@ map1 = """
 
 
 
-
+g                           gggg     ggg
 
 
 
@@ -54,7 +55,8 @@ def tiles(map1):
     for y, line in enumerate(map1):
         for x, c in enumerate(line):
             if c == "g":
-                displaysurf.blit(grass_tile, (x * 32, y * 32))
+                grass_rect = displaysurf.blit(grass_tile, (x * 32, y * 32))
+                grass_rect_list.append(grass_rect)
             if c == "d":
                 displaysurf.blit(dirt_tile, (x * 32, y * 32))
 
