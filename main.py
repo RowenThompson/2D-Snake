@@ -1,4 +1,5 @@
 import pygame, sys, random
+from map import *
 pygame.init()
 game_icon = pygame.image.load("game_icon.png")
 resolution = displaysurf_width, displaysurf_height = (1000, 1000)
@@ -19,6 +20,73 @@ enemy_ai = True
 font = pygame.font.SysFont("comicsansms", 35)
 #clock
 Clock = pygame.time.Clock()
+
+map1 = """
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg
+
+
+
+ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
+
+
+
+ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"""
+
+map1 = map1.splitlines()
+
+for line in map1:
+    print(line)
+
+grass_tile = pygame.image.load("grass_tile.png")
+grass_tile = pygame.transform.scale(grass_tile, (75, 75))
+
+dirt_tile = pygame.image.load("dirt_tile.png")
+dirt_tile = pygame.transform.scale(dirt_tile, (75, 75))
+
+def tiles(map1):
+    global grass_tile
+    for y, line in enumerate(map1):
+        for x, c in enumerate(line):
+            if c == "g":
+                displaysurf.blit(grass_tile, (x * 16, y * 16))
+            if c == "d":
+                displaysurf.blit(dirt_tile, (x * 16, y * 16))
 
 def quit_game():
     pygame.quit()
@@ -75,7 +143,7 @@ def game_loop():
         fps = Clock.get_fps()
         fps = round(fps)
         displaysurf.blit(fps_text, (displaysurf_width / 100, displaysurf_height / 100))
-        grass_ground_rect = pygame.draw.rect(displaysurf, green, pygame.Rect(displaysurf_width/1000, displaysurf_height/1.7, 1000, 400))
+        tiles(map1)
         Clock.tick(60)
         pygame.display.update()
 
