@@ -127,7 +127,7 @@ def game_loop():
             player_x -= player_speed
             player_direction = "west"
             player_moving = True
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_w]:
             player_jumping = True
         for tile_rect in tile_rect_list:
             if player_rect.colliderect(tile_rect):
@@ -160,6 +160,5 @@ def game_loop():
         
 running = True
 if __name__ == "__main__":
-    while running == True:
-        game_loop()
+    game_loop()
 quit_game()
